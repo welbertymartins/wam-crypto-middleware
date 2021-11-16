@@ -1,4 +1,4 @@
-const crypto = require('crypto')
+const crypto = require("crypto")
 
 const crypt = (algorithm = "aes-256-ctr") => (privateKey) => (content) => {
     const cipher = crypto.createCipher(algorithm, privateKey)
