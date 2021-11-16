@@ -2,15 +2,15 @@ const crypto = require("crypto")
 
 const crypt = (algorithm = "aes-256-ctr") => (privateKey) => (content) => {
     const cipher = crypto.createCipher(algorithm, privateKey)
-    return cipher.update(content, 'utf8', 'hex')
+    return cipher.update(content, "utf8", "hex")
 }
 
 const decrypt = (algorithm = "aes-256-ctr") => (privateKey) => (content) => {
     const decipher = crypto.createDecipher(algorithm, privateKey)
-    return decipher.update(content, 'hex', 'utf8')
+    return decipher.update(content, "hex", "utf8")
 }
 
-const hash = (algorithm = "sha512") => (content) => crypto.createHash(algorithm).update(content).digest('hex')
+const hash = (algorithm = "sha512") => (content) => crypto.createHash(algorithm).update(content).digest("hex")
 
 const base64Encode = (content) => {
     const bufferObj = Buffer.from(content, "utf8")
