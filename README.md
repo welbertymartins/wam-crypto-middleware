@@ -1,2 +1,2 @@
 # wam-crypto-middleware
-This is an simple crypto middleware project to use in other projects.
+This is a middleware that makes interacting with encryption and encoding algorithms easier.
