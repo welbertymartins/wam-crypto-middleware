@@ -4,7 +4,8 @@
   "description": "This is an simple crypto middleware project to use in other projects.",
   "main": "cryptoMiddleware.js",
   "scripts": {
-    "test": "nyc --reporter=html mocha"
+    "test": "nyc --reporter=html mocha",
+    "build": "npm prune --production"
   },
   "repository": {
     "type": "git",
