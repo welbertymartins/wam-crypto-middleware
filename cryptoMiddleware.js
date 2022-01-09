@@ -14,12 +14,12 @@ const hash = (algorithm = "sha512") => (content) => crypto.createHash(algorithm)
 
 const base64Encode = (content) => {
     const bufferObj = Buffer.from(content, "utf8")
-    return bufferObj.toString("base64");
+    return bufferObj.toString("base64")
 }
 
 const base64Decode = (content) => {
-    const bufferObj = Buffer.from(content, "base64");
-    return bufferObj.toString("utf8");
+    const bufferObj = Buffer.from(content, "base64")
+    return bufferObj.toString("utf8")
 }
 
 module.exports = { crypt, decrypt, hash, base64Encode, base64Decode }
