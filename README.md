@@ -1,5 +1,5 @@
 # wam-crypto-middleware
-This is a middleware that makes interacting with encryption and encoding algorithms easier.
+This is a middleware that simplifies object encryption, encoding and hash.
 
 ## install
 ### as a dependency
