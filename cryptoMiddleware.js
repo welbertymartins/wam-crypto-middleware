@@ -1,21 +1,13 @@
 const crypto = require("crypto")
 
-const crypt = (algorithm = "aes-256-ctr", ivLength = 16, separator = '#') => (privateKey) => (content) => {
-    const iv = crypto.randomBytes(ivLength)
-    const key = crypto.scryptSync(privateKey, 'salt', 32)
-    const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv)
-    const encrypted = Buffer.concat([cipher.update(content), cipher.final()])
-    return `${iv.toString('hex')}${separator}${encrypted.toString('hex')}`
+const crypt = (algorithm = "aes-256-ctr") => (privateKey) => (content) => {
+    const cipher = crypto.createCipher(algorithm, privateKey)
+    return cipher.update(content, "utf8", "hex")
 }
 
-const decrypt = (algorithm = "aes-256-ctr", separator = '#') => (privateKey) => (content) => {
-    const contentParts = content.split(separator)
-    const iv = Buffer.from(contentParts.shift(), 'hex')
-    const key = crypto.scryptSync(privateKey, 'salt', 32)
-    const encrypted = Buffer.from(contentParts.join(separator), 'hex')
-    const decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv)
-    const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()])
-    return decrypted.toString()
+const decrypt = (algorithm = "aes-256-ctr") => (privateKey) => (content) => {
+    const decipher = crypto.createDecipher(algorithm, privateKey)
+    return decipher.update(content, "hex", "utf8")
 }
 
 const hash = (algorithm = "sha512") => (content) => crypto.createHash(algorithm).update(content).digest("hex")
