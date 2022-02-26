@@ -1,50 +1,69 @@
 const crypto = require("crypto")
 
-const crypt = (algorithm = "aes-256-ctr") => (privateKey) => (content) => {
+const crypt = (algorithm = "aes-256-ctr", delimiter = ":", ivLength = 16) => (prePrivateKey) => (content, notLog = false) => {
     try {
-        const cipher = crypto.createCipher(algorithm, privateKey)
-        return cipher.update(content, "utf8", "hex")
+        const privateKey = hash('sha256')(prePrivateKey)
+        const iv = crypto.randomBytes(ivLength);
+        const cipher = crypto.createCipheriv(algorithm, Buffer.from(privateKey, 'hex'), iv);
+        const encrypted = Buffer.concat([cipher.update(content), cipher.final()])
+        return `${iv.toString('hex')}${delimiter}${encrypted.toString('hex')}`
     } catch (error) {
-        console.log(error)
+        if (!notLog) {
+            console.log(error)
+        }
         return ``
     }
 }
 
-const decrypt = (algorithm = "aes-256-ctr") => (privateKey) => (content) => {
+const decrypt = (algorithm = "aes-256-ctr", delimiter = ":") => (prePrivateKey) => (content, notLog = false) => {
     try {
-        const decipher = crypto.createDecipher(algorithm, privateKey)
-        return decipher.update(content, "hex", "utf8")
+        const privateKey = hash('sha256')(prePrivateKey)
+        const contentParts = content.split(delimiter);
+        const iv = Buffer.from(contentParts.shift(), 'hex')
+        const contentEncrypted = Buffer.from(contentParts.join(delimiter), 'hex')
+        const decipher = crypto.createDecipheriv(algorithm, Buffer.from(privateKey, 'hex'), iv)
+        const decrypted = Buffer.concat([decipher.update(contentEncrypted), decipher.final()])
+        return decrypted.toString();
     } catch (error) {
-        console.log(error)
-        return ``
+        if (!notLog) {
+            console.log(error)
+        }
+        return ""
     }
 }
 
-const hash = (algorithm = "sha512") => (content) => {
+const hash = (algorithm = "sha512") => (content, notLog = false) => {
     try {
         return crypto.createHash(algorithm).update(content).digest("hex")
     } catch (error) {
-        console.log(error)
-        return ``
+        if (!notLog) {
+            console.log(error)
+        }
+        return ""
     }
 }
 
-const base64Encode = (content) => {
+const base64Encode = (content, notLog = false) => {
     try {
         const bufferObj = Buffer.from(content, "utf8")
         return bufferObj.toString("base64")
     } catch (error) {
-        console.log(error)
-        return ``
+        if (!notLog) {
+            console.log(error)
+        }
+        return ""
     }
 }
 
-const base64Decode = (content) => {
+const base64Decode = (content, notLog = false) => {
     try {
         const bufferObj = Buffer.from(content, "base64")
         return bufferObj.toString("utf8")
     } catch (error) {
-        console.log(error)
+        if (!notLog) {
+            console.log(error)
+        }
+        return ""
     }
 }
 
