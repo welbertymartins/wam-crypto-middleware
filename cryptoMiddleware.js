@@ -4,8 +4,8 @@ const crypt = (algorithm = "aes-256-ctr", delimiter = ":", ivLength = 16) => (pr
     try {
         const privateKey = hash('sha256')(prePrivateKey)
         const iv = crypto.randomBytes(ivLength);
-        const cipher = crypto.createCipheriv(algorithm, Buffer.from(privateKey, 'hex'), iv);
-        const encrypted = Buffer.concat([cipher.update(content), cipher.final()])
+        const cipher = crypto.createCipheriv(algorithm, Buffer.from(privateKey, 'hex'), iv)
+        const encrypted = Buffer.concat([cipher.update(String(content)), cipher.final()])
         return `${iv.toString('hex')}${delimiter}${encrypted.toString('hex')}`
     } catch (error) {
         if (!notLog) {
@@ -18,7 +18,7 @@ const crypt = (algorithm = "aes-256-ctr", delimiter = ":", ivLength = 16) => (pr
 const decrypt = (algorithm = "aes-256-ctr", delimiter = ":") => (prePrivateKey) => (content, notLog = false) => {
     try {
         const privateKey = hash('sha256')(prePrivateKey)
-        const contentParts = content.split(delimiter);
+        const contentParts = String(content).split(delimiter)
         const iv = Buffer.from(contentParts.shift(), 'hex')
         const contentEncrypted = Buffer.from(contentParts.join(delimiter), 'hex')
         const decipher = crypto.createDecipheriv(algorithm, Buffer.from(privateKey, 'hex'), iv)
@@ -34,7 +34,7 @@ const decrypt = (algorithm = "aes-256-ctr", delimiter = ":") => (prePrivateKey) 
 
 const hash = (algorithm = "sha512") => (content, notLog = false) => {
     try {
-        return crypto.createHash(algorithm).update(content).digest("hex")
+        return crypto.createHash(algorithm).update(String(content)).digest("hex")
     } catch (error) {
         if (!notLog) {
             console.log(error)
