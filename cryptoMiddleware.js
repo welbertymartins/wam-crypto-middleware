@@ -11,7 +11,7 @@ const crypt = (algorithm = "aes-256-ctr", delimiter = ":", ivLength = 16) => (pr
         if (!notLog) {
             console.log(error)
         }
-        return ``
+        return ""
     }
 }
 
