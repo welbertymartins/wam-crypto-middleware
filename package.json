@@ -1,6 +1,6 @@
 {
   "name": "wam-crypto-middleware",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "This is an simple crypto middleware project to use in other projects.",
   "main": "cryptoMiddleware.js",
   "scripts": {
